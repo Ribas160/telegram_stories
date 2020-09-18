@@ -31,6 +31,8 @@ class Story
         $messages = [];
         $last_message = '';
         $messages_count = count($story[$points]['message']);
+
+        // отдельно получаем последнее сообщение из истории для отправки вместе с клавиатурой
         if ($messages_count > 1) {
             for ($i=0; $i <= ($messages_count - 2); $i++) { 
                 $messages[] = $story[$points]['message'][$i];

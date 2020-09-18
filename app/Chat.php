@@ -12,6 +12,7 @@ class Chat
     private $points;
     
 
+
     private function get_info()
     {
         $this->db = new Db();
@@ -25,6 +26,8 @@ class Chat
         $this->db->create();
         Logs::set_log('user_info: ' . 'uid=' . $this->uid . ', chatId=' . $this->chatId . ', username=' . $this->username . ', message=' . $this->message);
     }
+
+
 
     private function commands()
     {   
@@ -45,20 +48,26 @@ class Chat
         }
     }
 
+
     private function telling()
     {
         $stories = Story::get_stories_names();
+
+        // пользователь выбирает историю
         if (in_array($this->message, $stories)) {
             $this->db->check_user($this->uid, $this->username, $this->message);
             $this->db->active_enable($this->uid, $this->message);
             $this->db->reset_points($this->uid);
         }
         self::choice();
-        Logs::set_log('story: ' . $this->story['name'] . ', points: ' . $this->points);
+        Logs::set_log('story_info: name=' . $this->story['name'] . ', points=' . $this->points);
+
+        // начало игры
         if ($this->points == 0 && $this->message !== 'Начать') {
             $keyboard = [['Начать']];
             self::keyboard($keyboard, $this->story['intro']);
         } else {
+            // продолжение игры
             $messages = Story::get_messages($this->story['name'], $this->points);
             if (!empty($messages['messages'])) {
                 foreach($messages['messages'] as $message) {
@@ -79,6 +88,7 @@ class Chat
     }
 
 
+
     private function choice()
     {
         $user_story = $this->db->get_story($this->uid);
@@ -90,6 +100,8 @@ class Chat
             $this->db->update_points($this->uid, $this->story['name'], $this->points);
         }
     }
+
+
 
     private function keyboard($keyboard, $text)
     {
@@ -105,6 +117,7 @@ class Chat
             'reply_markup' => $reply_markup,
         ]);
     }
+
 
     private function message($message)
     {

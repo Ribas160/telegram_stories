@@ -14,7 +14,7 @@ class Db extends SQLite3 {
     }
 
     /**
-     * @todo создаем таблицу в базе данных
+     * создаем таблицу в базе данных
      */
     public function create() 
     {
@@ -23,7 +23,7 @@ class Db extends SQLite3 {
 
 
     /**
-     * @todo добавляем новго пользователя в базу данных
+     * добавляем новго пользователя в базу данных
      * @param integer $uid
      */
     public function new_user($uid, $username, $story)
@@ -37,7 +37,7 @@ class Db extends SQLite3 {
 
 
     /**
-     * @todo проверяем наличие пользователя в базе данных
+     * проверяем наличие пользователя в базе данных
      * @param integer $uid
      */
     public function check_user($uid, $username, $story)
@@ -54,9 +54,9 @@ class Db extends SQLite3 {
 
 
     /**
-     * @todo получаем колличество очков у пользователя
+     * получаем колличество очков у пользователя
      * @param integer $uid
-     * @return array
+     * @return string
      */
     public function get_points($uid, $story)
     {
@@ -70,7 +70,7 @@ class Db extends SQLite3 {
 
 
     /**
-     * @todo обновляем колличество очков у пользователя
+     * обновляем колличество очков у пользователя
      * @param integer $uid
      * @param integer $points
      */
@@ -83,6 +83,10 @@ class Db extends SQLite3 {
         $query->execute();
     }
 
+    /**
+     * сбрасываем очки у пользователя
+     * @param integer $uid
+     */
     public function reset_points($uid)
     {
         $query = $this->prepare("UPDATE " . $this->table . " SET user_points = :points WHERE user_id = :id");
@@ -92,6 +96,11 @@ class Db extends SQLite3 {
     }
 
 
+    /**
+     * получаем название истории пользователя
+     * @param integer $uid
+     * @return string
+     */
     public function get_story($uid)
     {
         $query = $this->prepare("SELECT story FROM " . $this->table . " WHERE user_id = :id AND active = :active");
@@ -103,6 +112,10 @@ class Db extends SQLite3 {
     }
 
 
+    /**
+     * объявляем активную историю пользователя
+     * @param integer $uid
+     */
     public function active_enable($uid, $story)
     {
         self::active_disable($uid);
@@ -114,6 +127,10 @@ class Db extends SQLite3 {
         $query->execute();
     }
 
+    /**
+     * сбрасываем активность истории пользователя
+     * @param integer $uid
+     */
     public function active_disable($uid)
     {
         $query = $this->prepare("UPDATE " . $this->table . " SET active = :active WHERE user_id = :id");
